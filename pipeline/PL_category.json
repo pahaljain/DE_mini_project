@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Category to SQL",
 				"type": "Copy",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
@@ -75,8 +75,10 @@
 				]
 			},
 			{
-				"name": "Copy data2",
+				"name": "Events to SQL",
 				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -156,7 +158,7 @@
 									"path": "$['event_date']['$date']['$numberLong']"
 								},
 								"sink": {
-									"name": "$numberLong"
+									"name": "event_date"
 								}
 							},
 							{
@@ -165,14 +167,6 @@
 								},
 								"sink": {
 									"name": "event_venue"
-								}
-							},
-							{
-								"source": {
-									"path": "$['__v']['$numberInt']"
-								},
-								"sink": {
-									"name": "__v_$numberInt"
 								}
 							}
 						]
@@ -187,6 +181,99 @@
 				"outputs": [
 					{
 						"referenceName": "DS_Sql_Events",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Orders to SQL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MongoDbAtlasSource",
+						"batchSize": 100
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['_id']['$oid']"
+								},
+								"sink": {
+									"name": "_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['user_id']['$oid']"
+								},
+								"sink": {
+									"name": "user_id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['event_id']['$oid']"
+								},
+								"sink": {
+									"name": "event_id"
+								}
+							},
+							{
+								"source": {
+									"path": "$['quantity']['$numberInt']"
+								},
+								"sink": {
+									"name": "quantity"
+								}
+							},
+							{
+								"source": {
+									"path": "$['total_price']['$numberInt']"
+								},
+								"sink": {
+									"name": "total_price"
+								}
+							},
+							{
+								"source": {
+									"path": "$['order_date']['$date']['$numberLong']"
+								},
+								"sink": {
+									"name": "order_date"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_Mongo_Orders",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_Sql_Orders",
 						"type": "DatasetReference"
 					}
 				]
