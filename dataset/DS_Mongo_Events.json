@@ -1,5 +1,5 @@
 {
-	"name": "DS_Mongo_Category",
+	"name": "DS_Mongo_Events",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_Mongo_to_SQL",
@@ -9,8 +9,7 @@
 		"type": "MongoDbAtlasCollection",
 		"schema": [],
 		"typeProperties": {
-			"collection": "categories"
+			"collection": "events"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }

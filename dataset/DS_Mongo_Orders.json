@@ -1,5 +1,5 @@
 {
-	"name": "DS_Mongo_Category",
+	"name": "DS_Mongo_Orders",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_Mongo_to_SQL",
@@ -7,10 +7,6 @@
 		},
 		"annotations": [],
 		"type": "MongoDbAtlasCollection",
-		"schema": [],
-		"typeProperties": {
-			"collection": "categories"
-		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+		"schema": []
+	}
 }

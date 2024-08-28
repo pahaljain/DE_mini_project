@@ -1,5 +1,5 @@
 {
-	"name": "DS_Sql_Category",
+	"name": "DS_Sql_Events",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -10,8 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "raw",
-			"table": "category"
+			"table": "events"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }

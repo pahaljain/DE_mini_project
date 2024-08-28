@@ -1,5 +1,5 @@
 {
-	"name": "DS_Sql_Category",
+	"name": "DS_Sql_Orders",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -7,11 +7,6 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [],
-		"typeProperties": {
-			"schema": "raw",
-			"table": "category"
-		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+		"schema": []
+	}
 }
