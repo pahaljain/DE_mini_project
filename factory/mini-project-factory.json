@@ -1,0 +1,9 @@
+{
+	"name": "mini-project-factory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "a3c9c8e7-da8e-4b4e-a60d-68d9ea18e0c4",
+		"tenantId": "2800c0a0-70e9-49be-8733-faeaa6aced99"
+	}
+}

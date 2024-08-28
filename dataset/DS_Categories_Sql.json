@@ -1,0 +1,17 @@
+{
+	"name": "DS_Categories_Sql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "category"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
