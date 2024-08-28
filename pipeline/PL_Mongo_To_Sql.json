@@ -1,12 +1,10 @@
 {
-	"name": "PL_category",
+	"name": "PL_Mongo_To_Sql",
 	"properties": {
 		"activities": [
 			{
 				"name": "Category to SQL",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -77,8 +75,6 @@
 			{
 				"name": "Events to SQL",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
