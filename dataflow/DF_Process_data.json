@@ -9,17 +9,57 @@
 						"referenceName": "DS_Sql_Events",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "eventsSource"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Events",
+						"type": "DatasetReference"
+					},
+					"name": "eventsSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "cleaningEventsById",
+					"description": "Cleaning the data by removing the column if id is NULL"
+				},
+				{
+					"name": "derivedEventsByPrice"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          {_id} as string,",
+				"          name_of_event as string,",
+				"          {category_id_$oid} as string,",
+				"          {no_of_tickets_$numberInt} as string,",
+				"          {price_per_ticket_$numberInt} as string,",
+				"          description_of_event as string,",
+				"          event_date as string,",
+				"          event_venue as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     batchSize: 0,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1"
+				"     format: 'table') ~> eventsSource",
+				"eventsSource filter(!isNull({_id})\r",
+				"\r",
+				") ~> cleaningEventsById",
+				"cleaningEventsById derive({price_per_ticket_$numberInt} = coalesce({price_per_ticket_$numberInt},100)) ~> derivedEventsByPrice",
+				"derivedEventsByPrice sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> eventsSink"
 			]
 		}
 	}

@@ -35,7 +35,8 @@
 									"path": "$['_id']['$oid']"
 								},
 								"sink": {
-									"name": "_id"
+									"name": "_id",
+									"type": "String"
 								}
 							},
 							{
@@ -75,7 +76,14 @@
 			{
 				"name": "Events to SQL",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Category to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -114,7 +122,8 @@
 									"path": "$['name_of_event']"
 								},
 								"sink": {
-									"name": "name_of_event"
+									"name": "name_of_event",
+									"type": "String"
 								}
 							},
 							{
@@ -122,7 +131,8 @@
 									"path": "$['category_id']['$oid']"
 								},
 								"sink": {
-									"name": "category_id_$oid"
+									"name": "category_id_$oid",
+									"type": "String"
 								}
 							},
 							{
@@ -130,7 +140,8 @@
 									"path": "$['no_of_tickets']['$numberInt']"
 								},
 								"sink": {
-									"name": "no_of_tickets_$numberInt"
+									"name": "no_of_tickets_$numberInt",
+									"type": "Int64"
 								}
 							},
 							{
@@ -138,7 +149,8 @@
 									"path": "$['price_per_ticket']['$numberInt']"
 								},
 								"sink": {
-									"name": "price_per_ticket_$numberInt"
+									"name": "price_per_ticket",
+									"type": "Int64"
 								}
 							},
 							{
@@ -146,7 +158,8 @@
 									"path": "$['description_of_event']"
 								},
 								"sink": {
-									"name": "description_of_event"
+									"name": "description_of_event",
+									"type": "String"
 								}
 							},
 							{
@@ -162,7 +175,8 @@
 									"path": "$['event_venue']"
 								},
 								"sink": {
-									"name": "event_venue"
+									"name": "event_venue",
+									"type": "String"
 								}
 							}
 						]
@@ -184,7 +198,14 @@
 			{
 				"name": "Orders to SQL",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Events to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -239,7 +260,8 @@
 									"path": "$['quantity']['$numberInt']"
 								},
 								"sink": {
-									"name": "quantity"
+									"name": "quantity",
+									"type": "Int64"
 								}
 							},
 							{
@@ -247,7 +269,8 @@
 									"path": "$['total_price']['$numberInt']"
 								},
 								"sink": {
-									"name": "total_price"
+									"name": "total_price",
+									"type": "Int64"
 								}
 							},
 							{
