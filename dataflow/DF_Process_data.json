@@ -42,6 +42,10 @@
 					"name": "categorySink"
 				},
 				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Orders",
+						"type": "DatasetReference"
+					},
 					"name": "ordersSink"
 				}
 			],
@@ -53,6 +57,12 @@
 				{
 					"name": "cleaningByPrice",
 					"description": "Updating the column price_per_ticket,"
+				},
+				{
+					"name": "cleaningCategoryById"
+				},
+				{
+					"name": "cleaningName"
 				}
 			],
 			"scriptLines": [
@@ -80,7 +90,15 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> categorySource",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          {_id} as string,",
+				"          user_id as string,",
+				"          event_id as string,",
+				"          quantity as long,",
+				"          total_price as long,",
+				"          order_date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> ordersSource",
@@ -88,6 +106,9 @@
 				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket))\r",
 				",",
 				"          {no_of_tickets_$numberInt} = iif(isNull(toInteger(no_of_tickets_$numberInt)), 0, toInteger(no_of_tickets_$numberInt))) ~> cleaningByPrice",
+				"categorySource filter(!isNull({_id})) ~> cleaningCategoryById",
+				"cleaningCategoryById derive(name = iif(isNull((name)), 'Default Name', (name)),",
+				"          description = iif(isNull((description)), 'Default Desciption', (description))) ~> cleaningName",
 				"cleaningByPrice sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
@@ -98,7 +119,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> eventsSink",
-				"categorySource sink(allowSchemaDrift: true,",
+				"cleaningName sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -110,8 +131,14 @@
 				"     errorHandlingOption: 'stopOnFirstError') ~> categorySink",
 				"ordersSource sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> ordersSink"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> ordersSink"
 			]
 		}
 	}

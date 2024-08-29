@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "raw",
-			"table": "Orders"
+			"table": "order"
 		}
 	}
 }
