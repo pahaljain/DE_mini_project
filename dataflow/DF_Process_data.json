@@ -27,7 +27,8 @@
 					"description": "Cleaning the data by removing the column if id is NULL"
 				},
 				{
-					"name": "derivedEventsByPrice"
+					"name": "cleaningByPrice",
+					"description": "Updating the column price_per_ticket,"
 				}
 			],
 			"scriptLines": [
@@ -35,8 +36,8 @@
 				"          {_id} as string,",
 				"          name_of_event as string,",
 				"          {category_id_$oid} as string,",
-				"          {no_of_tickets_$numberInt} as string,",
-				"          {price_per_ticket_$numberInt} as string,",
+				"          {no_of_tickets_$numberInt} as long,",
+				"          price_per_ticket as long,",
 				"          description_of_event as string,",
 				"          event_date as string,",
 				"          event_venue as string",
@@ -46,11 +47,10 @@
 				"     batchSize: 0,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> eventsSource",
-				"eventsSource filter(!isNull({_id})\r",
-				"\r",
-				") ~> cleaningEventsById",
-				"cleaningEventsById derive({price_per_ticket_$numberInt} = coalesce({price_per_ticket_$numberInt},100)) ~> derivedEventsByPrice",
-				"derivedEventsByPrice sink(allowSchemaDrift: true,",
+				"eventsSource filter(!isNull({_id})) ~> cleaningEventsById",
+				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket))\r",
+				") ~> cleaningByPrice",
+				"cleaningByPrice sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
