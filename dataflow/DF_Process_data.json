@@ -10,6 +10,20 @@
 						"type": "DatasetReference"
 					},
 					"name": "eventsSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Sql_Category",
+						"type": "DatasetReference"
+					},
+					"name": "categorySource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Sql_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "ordersSource"
 				}
 			],
 			"sinks": [
@@ -19,6 +33,16 @@
 						"type": "DatasetReference"
 					},
 					"name": "eventsSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Category",
+						"type": "DatasetReference"
+					},
+					"name": "categorySink"
+				},
+				{
+					"name": "ordersSink"
 				}
 			],
 			"transformations": [
@@ -47,6 +71,19 @@
 				"     batchSize: 0,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> eventsSource",
+				"source(output(",
+				"          {_id} as string,",
+				"          name as string,",
+				"          description as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> categorySource",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ordersSource",
 				"eventsSource filter(!isNull({_id})) ~> cleaningEventsById",
 				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket))\r",
 				",",
@@ -60,7 +97,21 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> eventsSink"
+				"     errorHandlingOption: 'stopOnFirstError') ~> eventsSink",
+				"categorySource sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> categorySink",
+				"ordersSource sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ordersSink"
 			]
 		}
 	}

@@ -1,5 +1,5 @@
 {
-	"name": "DS_Sql_Orders",
+	"name": "DS_Cleaned_Category",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -9,8 +9,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
-			"table": "Orders"
+			"schema": "prep",
+			"table": "cleaned_category"
 		}
 	}
 }
