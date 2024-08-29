@@ -1,0 +1,91 @@
+{
+	"name": "DF_Reporting_Output",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "ordersSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Events",
+						"type": "DatasetReference"
+					},
+					"name": "eventsSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Event_KPI",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "sort1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {_id} as string,",
+				"          user_id as string,",
+				"          event_id as string,",
+				"          quantity as long,",
+				"          total_price as long,",
+				"          order_date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ordersSource",
+				"source(output(",
+				"          {_id} as string,",
+				"          name_of_event as string,",
+				"          {category_id_$oid} as string,",
+				"          {no_of_tickets_$numberInt} as integer,",
+				"          price_per_ticket as integer,",
+				"          description_of_event as string,",
+				"          event_date as string,",
+				"          event_venue as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> eventsSource",
+				"ordersSource, eventsSource join(event_id == eventsSource@{_id},",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 aggregate(groupBy(event_id,",
+				"          name_of_event),",
+				"     event_count = count(event_id)) ~> aggregate1",
+				"aggregate1 sort(desc(event_count, true)) ~> sort1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
