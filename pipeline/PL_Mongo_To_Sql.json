@@ -5,8 +5,6 @@
 			{
 				"name": "Category to SQL",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -78,8 +76,6 @@
 			{
 				"name": "Events to SQL",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Category to SQL",
@@ -202,8 +198,6 @@
 			{
 				"name": "Orders to SQL",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Events to SQL",
