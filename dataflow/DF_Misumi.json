@@ -24,7 +24,11 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          {Department Code} as string,",
@@ -48,7 +52,14 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> InputSource",
-				"InputSource sink(allowSchemaDrift: true,",
+				"InputSource aggregate(groupBy({Category Name}),",
+				"     {Min Price} = avg(toInteger({Min Price})),",
+				"          {Avg Max Price} = avg(toInteger({Max Price})),",
+				"          {Min Price Per Piece} = first({Min Price Per Piece}),",
+				"          {Max Price Per Piece} = first({Max Price Per Piece}),",
+				"          {Min Days to Ship} = first({Min Days to Ship}),",
+				"          {Max Days to Ship} = first({Max Days to Ship})) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
