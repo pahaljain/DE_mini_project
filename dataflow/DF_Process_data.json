@@ -1,6 +1,9 @@
 {
 	"name": "DF_Process_data",
 	"properties": {
+		"folder": {
+			"name": "Full_stack"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -103,8 +106,7 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> ordersSource",
 				"eventsSource filter(!isNull({_id})) ~> cleaningEventsById",
-				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket))\r",
-				",",
+				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket)),",
 				"          {no_of_tickets_$numberInt} = iif(isNull(toInteger(no_of_tickets_$numberInt)), 0, toInteger(no_of_tickets_$numberInt))) ~> cleaningByPrice",
 				"categorySource filter(!isNull({_id})) ~> cleaningCategoryById",
 				"cleaningCategoryById derive(name = iif(isNull((name)), 'Default Name', (name)),",
