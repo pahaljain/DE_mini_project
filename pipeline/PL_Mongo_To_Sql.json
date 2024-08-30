@@ -307,7 +307,14 @@
 				"name": "Clean_Data",
 				"description": "Clean Data sets of Category, Events,  and Orders",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Orders to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
