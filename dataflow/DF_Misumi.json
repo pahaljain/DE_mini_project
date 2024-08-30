@@ -26,7 +26,7 @@
 			],
 			"transformations": [
 				{
-					"name": "aggregate1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -52,14 +52,11 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> InputSource",
-				"InputSource aggregate(groupBy({Category Name}),",
-				"     {Min Price} = avg(toInteger({Min Price})),",
-				"          {Avg Max Price} = avg(toInteger({Max Price})),",
-				"          {Min Price Per Piece} = first({Min Price Per Piece}),",
-				"          {Max Price Per Piece} = first({Max Price Per Piece}),",
-				"          {Min Days to Ship} = first({Min Days to Ship}),",
-				"          {Max Days to Ship} = first({Max Days to Ship})) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"InputSource derive({Min Price} = coalesce({Min Price},\"100\"),",
+				"          {Max Price} = coalesce({Max Price},\"200\"),",
+				"          {Min Price Per Piece} = coalesce({Min Price Per Piece},\"80\"),",
+				"          {Max Price Per Piece} = coalesce({Max Price Per Piece},\"250\")) ~> derivedColumn1",
+				"InputSource sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
