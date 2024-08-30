@@ -24,11 +24,7 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "aggregate1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          {Department Code} as string,",
@@ -52,8 +48,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> InputSource",
-				"InputSource aggregate(avg_min_price = toInteger(avg(MinPrice))) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"InputSource sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",

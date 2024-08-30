@@ -319,7 +319,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DF_Process_data",
+						"referenceName": "DF_Process_Data",
 						"type": "DataFlowReference"
 					},
 					"compute": {

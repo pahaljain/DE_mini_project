@@ -1,0 +1,147 @@
+{
+	"name": "DF_Process_Data",
+	"properties": {
+		"folder": {
+			"name": "DF_Folder_Full_stack"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Sql_Events",
+						"type": "DatasetReference"
+					},
+					"name": "eventsSource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Sql_Category",
+						"type": "DatasetReference"
+					},
+					"name": "categorySource"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Sql_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "ordersSource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Events",
+						"type": "DatasetReference"
+					},
+					"name": "eventsSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Category",
+						"type": "DatasetReference"
+					},
+					"name": "categorySink"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Cleaned_Orders",
+						"type": "DatasetReference"
+					},
+					"name": "ordersSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "cleaningEventsById",
+					"description": "Cleaning the data by removing the column if id is NULL"
+				},
+				{
+					"name": "cleaningByPrice",
+					"description": "Updating the column price_per_ticket,"
+				},
+				{
+					"name": "cleaningCategoryById"
+				},
+				{
+					"name": "cleaningName"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {_id} as string,",
+				"          name_of_event as string,",
+				"          {category_id_$oid} as string,",
+				"          {no_of_tickets_$numberInt} as long,",
+				"          price_per_ticket as long,",
+				"          description_of_event as string,",
+				"          event_date as string,",
+				"          event_venue as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     batchSize: 0,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> eventsSource",
+				"source(output(",
+				"          {_id} as string,",
+				"          name as string,",
+				"          description as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> categorySource",
+				"source(output(",
+				"          {_id} as string,",
+				"          user_id as string,",
+				"          event_id as string,",
+				"          quantity as long,",
+				"          total_price as long,",
+				"          order_date as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ordersSource",
+				"eventsSource filter(!isNull({_id})) ~> cleaningEventsById",
+				"cleaningEventsById derive(price_per_ticket = iif(isNull(toInteger(price_per_ticket)), 100, toInteger(price_per_ticket)),",
+				"          {no_of_tickets_$numberInt} = iif(isNull(toInteger(no_of_tickets_$numberInt)), 0, toInteger(no_of_tickets_$numberInt))) ~> cleaningByPrice",
+				"categorySource filter(!isNull({_id})) ~> cleaningCategoryById",
+				"cleaningCategoryById derive(name = iif(isNull((name)), 'Default Name', (name)),",
+				"          description = iif(isNull((description)), 'Default Desciption', (description))) ~> cleaningName",
+				"cleaningByPrice sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> eventsSink",
+				"cleaningName sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> categorySink",
+				"ordersSource sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> ordersSink"
+			]
+		}
+	}
+}
