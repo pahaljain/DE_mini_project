@@ -1,0 +1,24 @@
+{
+	"name": "DS_Misumi_Input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Misumi"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "misumi_data",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "misumi_data.xlsx",
+				"container": "misumi"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
