@@ -1,5 +1,5 @@
 {
-	"name": "DS_Misumi_Input",
+	"name": "DS_Input_Misumi",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
