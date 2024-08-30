@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Category to SQL",
+				"name": "Category Mongo to SQL",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -74,16 +74,9 @@
 				]
 			},
 			{
-				"name": "Events to SQL",
+				"name": "Events Mongo to SQL",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Category to SQL",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -196,16 +189,9 @@
 				]
 			},
 			{
-				"name": "Orders to SQL",
+				"name": "Orders Mongo to SQL",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Events to SQL",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -303,7 +289,19 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Orders to SQL",
+						"activity": "Orders Mongo to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Events Mongo to SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Category Mongo to SQL",
 						"dependencyConditions": [
 							"Succeeded"
 						]
