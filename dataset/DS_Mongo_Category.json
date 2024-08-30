@@ -5,6 +5,9 @@
 			"referenceName": "LS_Mongo_to_SQL",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "DS_Folder_Full_Stack"
+		},
 		"annotations": [],
 		"type": "MongoDbAtlasCollection",
 		"schema": [],

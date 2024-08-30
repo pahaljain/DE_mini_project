@@ -1,5 +1,5 @@
 {
-	"name": "DS_Sql_Misumi",
+	"name": "DS_Report_Misumi",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -12,8 +12,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "raw",
-			"table": "misumi"
+			"schema": "report",
+			"table": "KPI"
 		}
 	}
 }

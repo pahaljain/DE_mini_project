@@ -2,7 +2,7 @@
 	"name": "DF_Reporting_Output",
 	"properties": {
 		"folder": {
-			"name": "Full_stack"
+			"name": "DF_Folder_Full_stack"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {

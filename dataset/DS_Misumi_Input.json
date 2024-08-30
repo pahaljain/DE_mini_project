@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
-			"name": "Misumi"
+			"name": "DS_Folder_Misumi"
 		},
 		"annotations": [],
 		"type": "Excel",
