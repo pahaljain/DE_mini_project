@@ -21,7 +21,7 @@
 						"referenceName": "DS_Report_Misumi",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -56,7 +56,7 @@
 				"          {Max Price} = coalesce({Max Price},\"200\"),",
 				"          {Min Price Per Piece} = coalesce({Min Price Per Piece},\"80\"),",
 				"          {Max Price Per Piece} = coalesce({Max Price Per Piece},\"250\")) ~> derivedColumn1",
-				"InputSource sink(allowSchemaDrift: true,",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -65,7 +65,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
 			]
 		}
 	}
